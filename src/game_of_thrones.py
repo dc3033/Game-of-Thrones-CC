@@ -2,7 +2,7 @@
 #Game of Thrones Coding Challenge
 
 #imports
-import pyspark
+from pyspark import SparkContext, SparkConf
 import re
 
 #function that takes a file's body and cleans it by removing punctuation, splitting on spaces, and setting it to lowercase
@@ -32,7 +32,7 @@ if __name__ == "__main__":
     sc = SparkContext(appName="invertedIndex", conf=SparkConf().set("spark.driver.host", "localhost"))
 
     #load all of the files in the input directory into a RDD
-    allFilesRDD =  sc.wholeTextFiles("..\\input\\*")
+    allFilesRDD =  sc.wholeTextFiles("../input/*")
 
     #clean the text of the files, and set the words as keys and filenames as values
     cleanedRDD = allFilesRDD.map(clean).map(filename_value).flatMap(lambda x:x)
@@ -44,12 +44,12 @@ if __name__ == "__main__":
     indexedRDD = reducedRDD.zipWithIndex()
 
     #create a dictionary with words as keys and indices as values
-    indexDict = final_rdd.map(lambda x: (x[0][0],x[1])).collectAsMap()
+    indexDict = indexedRDD.map(lambda x: (x[0][0],x[1])).collectAsMap()
 
     #write the dictionary to a text file
-    dictFile = open("..\\output\\dictionary.txt","w")
+    dictFile = open("../output/dictionary.txt","w")
     dictFile.write( str(indexDict) )
     dictFile.close()
 
     #create an inverted index by setting indices as keys and filename lists as values, then output in a text file
-    final_rdd.map(lambda x : (x[1],x[0][1])).saveAsTextFile("..\\output\\inverted_index.txt")
+    indexedRDD.map(lambda x : (x[1],x[0][1])).saveAsTextFile("../output/inverted_index.txt")
