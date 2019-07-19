@@ -52,4 +52,4 @@ if __name__ == "__main__":
     dictFile.close()
 
     #create an inverted index by setting indices as keys and filename lists as values, then output in a text file
-    indexedRDD.map(lambda x : (x[1],x[0][1])).saveAsTextFile("../output/inverted_index.txt")
+    indexedRDD.map(lambda x : (x[1],x[0][1])).saveAsTextFile("../output/inverted_index")
