@@ -60,7 +60,6 @@ if __name__ == "__main__":
     index_path = "../output/inverted_index.txt"
     with open(index_path, 'wb') as outfile:
         for filename in glob.glob('../output/inverted_index/*'):
-            print(filename[25:29])
             if filename[25:29] != 'part':
                 # don't want to copy anything that isn't the text files
                 continue
