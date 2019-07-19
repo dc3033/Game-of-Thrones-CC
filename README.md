@@ -27,7 +27,7 @@ Pyspark: https://mortada.net/3-easy-steps-to-set-up-pyspark.html
     │   └── 44
     ├── output
         └── dictionary.txt
-        └── inverted_index
+        └── inverted_index.txt
 
 # Run Instructions
 From your terminal, set your current directory to the directory where game_of_thrones.py is located, then enter the following command:
