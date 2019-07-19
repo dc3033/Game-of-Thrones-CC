@@ -4,6 +4,8 @@
 #imports
 from pyspark import SparkContext, SparkConf
 import re
+import shutil
+import glob
 
 #function that takes a file's body and cleans it by removing punctuation, splitting on spaces, and setting it to lowercase
 def clean(file_body):
@@ -53,3 +55,17 @@ if __name__ == "__main__":
 
     #create an inverted index by setting indices as keys and filename lists as values, then output in a text file
     indexedRDD.map(lambda x : (x[1],x[0][1])).saveAsTextFile("../output/inverted_index")
+    
+    #copy the text files into a single file
+    index_path = "../output/inverted_index.txt"
+    with open(index_path, 'wb') as outfile:
+        for filename in glob.glob('../output/inverted_index/*'):
+            print(filename[25:29])
+            if filename[25:29] != 'part':
+                # don't want to copy anything that isn't the text files
+                continue
+            with open(filename, 'rb') as readfile:
+                shutil.copyfileobj(readfile, outfile)
+
+    #delete directory with copied files
+    shutil.rmtree('../output/inverted_index')
